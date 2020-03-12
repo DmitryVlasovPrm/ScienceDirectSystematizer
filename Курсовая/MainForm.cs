@@ -27,6 +27,7 @@ namespace CourseWork
             DistributionToolStripMenuItem.Enabled = false; ViewToolStripMenuItem.Enabled = false;
             SearchToolStripMenuItem.Enabled = false;
             DiagrammToolStripMenuItem.Enabled = false;
+            dataGridView1.RowTemplate.Height = 30;
         }
 
         private bool _list;
@@ -458,7 +459,6 @@ namespace CourseWork
 
                     continue;
                 }
-                //Types_count.other_count++;
             }
             conferencesYears.Sort((a, b) => b.CompareTo(a));
             journalsYears.Sort((a, b) => b.CompareTo(a));
@@ -588,12 +588,6 @@ namespace CourseWork
                 }
                 dataGridView1[author_count.FindIndex(x => x == item.author_count) + 1, dataGridView1.Rows.Count - 1].Value
                     = item.publication_count;
-
-                for (int i = 0, aCnt = author_count.Count; i < aCnt; i++)
-                {
-                    if (dataGridView1[i + 1, dataGridView1.Rows.Count - 1].Value == null)
-                        dataGridView1[i + 1, dataGridView1.Rows.Count - 1].Value = 0;
-                }
             }
 
             type = 3;
@@ -636,12 +630,6 @@ namespace CourseWork
                         name = "Книги";
                         count = typesCount.book_count;
                         break;
-                    /*
-                    case 3:
-                        name = "Другие";
-                        count = Types_count.other_count;
-                        break;
-                    */
                 }
 
                 dataGridView1[0, i].Value = name;
@@ -654,13 +642,18 @@ namespace CourseWork
 
         private void ShowTable5()
         {
+
+        }
+
+        private void ShowTable6()
+        {
             var column0 = new DataGridViewColumn();
             column0.HeaderCell.Style.Font = new System.Drawing.Font(dataGridView1.DefaultCellStyle.Font, FontStyle.Bold);
             column0.HeaderText = "Конференция " + @"\" + " Год";
             column0.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
             column0.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             column0.ReadOnly = true;
-            column0.Width = 230;
+            column0.Width = 350;
             column0.CellTemplate = new DataGridViewTextBoxCell();
             dataGridView1.Columns.Add(column0);
 
@@ -668,7 +661,7 @@ namespace CourseWork
             {
                 var current_column = new DataGridViewColumn();
                 current_column.HeaderCell.Style.Font = new System.Drawing.Font(dataGridView1.DefaultCellStyle.Font, FontStyle.Bold);
-                current_column.HeaderText = author_count[i].ToString();
+                current_column.HeaderText = conferencesYears[i].ToString();
                 current_column.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 current_column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 current_column.ReadOnly = true;
@@ -678,31 +671,21 @@ namespace CourseWork
             }
             dataGridView1.AllowUserToAddRows = false;
 
-            foreach (var item in Authors_years_count)
+            foreach (var item in conferences)
             {
                 if (dataGridView1.Rows.Count == 0 ||
-                    dataGridView1[0, dataGridView1.Rows.Count - 1].Value.ToString() != item.year)
+                    dataGridView1[0, dataGridView1.Rows.Count - 1].Value.ToString() != item.name)
                 {
                     dataGridView1.Rows.Add();
-                    dataGridView1[0, dataGridView1.Rows.Count - 1].Value = item.year;
+                    dataGridView1[0, dataGridView1.Rows.Count - 1].Value = item.name;
                 }
-                dataGridView1[author_count.FindIndex(x => x == item.author_count) + 1, dataGridView1.Rows.Count - 1].Value
-                    = item.publication_count;
-
-                for (int i = 0, aCnt = author_count.Count; i < aCnt; i++)
-                {
-                    if (dataGridView1[i + 1, dataGridView1.Rows.Count - 1].Value == null)
-                        dataGridView1[i + 1, dataGridView1.Rows.Count - 1].Value = 0;
-                }
+                
+                dataGridView1[conferencesYears.FindIndex(x => x == item.year) + 1, dataGridView1.Rows.Count - 1].Value
+                    = item.count;
             }
-
-            type = 5;
+            
+            type = 6;
             DiagrammToolStripMenuItem.Enabled = false;
-        }
-
-        private void ShowTable6()
-        {
-
         }
         #endregion
 
