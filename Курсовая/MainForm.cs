@@ -27,7 +27,9 @@ namespace CourseWork
             DistributionToolStripMenuItem.Enabled = false; ViewToolStripMenuItem.Enabled = false;
             SearchToolStripMenuItem.Enabled = false;
             DiagrammToolStripMenuItem.Enabled = false;
+
             dataGridView1.RowTemplate.Height = 30;
+            dataGridView1.DefaultCellStyle.Font = new Font("Microsoft Sans Serif", 11);
         }
 
         private bool _list;
