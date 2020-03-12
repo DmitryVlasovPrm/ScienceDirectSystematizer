@@ -90,7 +90,6 @@ namespace CourseWork
                     Diagramm.Series["first"].Points.AddXY("Книги", MainForm.typesCount.book_count);
                     Diagramm.Series["first"].Points.AddXY("Журналы", MainForm.typesCount.journal_count);
                     Diagramm.Series["first"].Points.AddXY("Конференции", MainForm.typesCount.conference_count);
-                    //Diagramm.Series["first"].Points.AddXY("Другие", MainForm.Types_count.other_count);
 
                     break;
             }
@@ -166,7 +165,6 @@ namespace CourseWork
                     Diagramm.Series["first"].Points.AddXY("Книги", MainForm.typesCount.book_count);
                     Diagramm.Series["first"].Points.AddXY("Журналы", MainForm.typesCount.journal_count);
                     Diagramm.Series["first"].Points.AddXY("Конференции", MainForm.typesCount.conference_count);
-                    //Diagramm.Series[0].Points.AddXY("Другие", MainForm.Types_count.other_count);
 
                     double total4 = Diagramm.Series["first"].Points.Sum(item => item.YValues[0]);
                     foreach (var point in Diagramm.Series["first"].Points)
