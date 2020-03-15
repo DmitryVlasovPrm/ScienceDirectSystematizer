@@ -28,7 +28,7 @@ namespace CourseWork
             SearchToolStripMenuItem.Enabled = false;
             DiagrammToolStripMenuItem.Enabled = false;
 
-            dataGridView1.RowTemplate.Height = 30;
+            dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dataGridView1.DefaultCellStyle.Font = new Font("Microsoft Sans Serif", 11);
         }
 
@@ -61,17 +61,17 @@ namespace CourseWork
 
         #region Списки
         //Список всех публикаций
-        static List<Publication> Publications = new List<Publication>();
+        static List<Publication> publications = new List<Publication>();
         //Списки для распределений
-        public static List<Year_count> Years_count = new List<Year_count>();
-        public static List<Keyword_count> Keywords_count = new List<Keyword_count>();
-        static List<Author_year_count> Authors_years_count = new List<Author_year_count>(); static List<int> author_count = new List<int>();
+        public static List<YearCount> yearsCount = new List<YearCount>();
+        public static List<KeywordCount> keywordsCount = new List<KeywordCount>();
+        static List<AuthorYearCount> authorsYearsCount = new List<AuthorYearCount>(); static List<int> authorCount = new List<int>();
         
-        public static Type_count typesCount = new Type_count(); public static bool typeFlag = false;
-        public static List<YearCount> journals = new List<YearCount>(); public static List<YearCount> conferences = new List<YearCount>();
+        public static TypeCount typesCount = new TypeCount(); public static bool typeFlag = false;
+        public static List<YearCountType> journals = new List<YearCountType>(); public static List<YearCountType> conferences = new List<YearCountType>();
         static List<string> journalsYears = new List<string>(); static List<string> conferencesYears = new List<string>();
         //Список для поиска
-        static List<Publication> FilterPublications = new List<Publication>();
+        static List<Publication> filterPublications = new List<Publication>();
         #endregion
 
         #region Открытие файла и чтение из него
@@ -140,7 +140,7 @@ namespace CourseWork
             {
                 //id в зависимости от количества файлов
                 if (first_time) Clear();     
-                int id = Publications.Count;
+                int id = publications.Count;
 
                 using (StreamReader sr = new StreamReader(path, Encoding.Default))
                 {
@@ -208,7 +208,7 @@ namespace CourseWork
                     sr.Close();
                 }
 
-                Publications.AddRange(This_publications);
+                publications.AddRange(This_publications);
             }
             //Файл не удалось считать (ошибка)
             catch
@@ -256,7 +256,7 @@ namespace CourseWork
             
             //Если есть дубликат по названию и авторам
             var authors = new HashSet<string>(item.authors);
-            var element = Publications.Find(a => a.title == item.title);
+            var element = publications.Find(a => a.title == item.title);
             if (element != null)
                 if (authors.SetEquals(element.authors))
                     return true;
@@ -268,12 +268,14 @@ namespace CourseWork
         public void Clear()
         {
             Clear_table();
-            Publications.Clear();
-            Years_count.Clear();
-            Keywords_count.Clear();
-            Authors_years_count.Clear(); author_count.Clear();
-            typesCount = new Type_count(); typeFlag = false;
-            FilterPublications.Clear();
+            publications.Clear();
+            yearsCount.Clear();
+            keywordsCount.Clear();
+            authorsYearsCount.Clear(); authorCount.Clear();
+            typesCount.Clear(); typeFlag = false;
+            journals.Clear(); conferences.Clear();
+            journalsYears.Clear(); conferencesYears.Clear();
+            filterPublications.Clear();
         }
 
         //Активируем кнопки
@@ -321,49 +323,49 @@ namespace CourseWork
         //Распределение по годам
         public static void Create_years_distrib()
         {
-            foreach (var item in Publications)
+            foreach (var item in publications)
             {
                 if (item.year == "") continue;
-                var element = Years_count.Find(a => a.year == item.year);
+                var element = yearsCount.Find(a => a.year == item.year);
                 if (element != null)
                 {
                     element.publication_count++;
                 }
                 else
                 {
-                    Year_count it = new Year_count(item.year);
-                    Years_count.Add(it);
+                    YearCount it = new YearCount(item.year);
+                    yearsCount.Add(it);
                 }
             }
-            Years_count.Sort((a, b) => b.year.CompareTo(a.year));
+            yearsCount.Sort((a, b) => b.year.CompareTo(a.year));
         }
 
         //Распределение по ключевым словам
         public static void Create_keywords_distrib()
         {
-            foreach (var item in Publications)
+            foreach (var item in publications)
             {
                 foreach (var word in item.keywords)
                 {
-                    var element = Keywords_count.Find(a => a.keyword.ToLower() == word.ToLower());
+                    var element = keywordsCount.Find(a => a.keyword.ToLower() == word.ToLower());
                     if (element != null)
                     {
                         element.publication_count++;
                     }
                     else
                     {
-                        Keyword_count it = new Keyword_count(word);
-                        Keywords_count.Add(it);
+                        KeywordCount it = new KeywordCount(word);
+                        keywordsCount.Add(it);
                     }
                 }
             }
-            Keywords_count.Sort((a, b) => b.publication_count.CompareTo(a.publication_count));
+            keywordsCount.Sort((a, b) => b.publication_count.CompareTo(a.publication_count));
         }
 
         private void YearsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Clear_table();
-            if (Years_count.Count > 0)
+            if (yearsCount.Count > 0)
                 ShowTable1And2(1);
             else
             {
@@ -375,7 +377,7 @@ namespace CourseWork
         private void KeywordsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Clear_table();
-            if (Keywords_count.Count > 0)
+            if (keywordsCount.Count > 0)
                 ShowTable1And2(2);
             else
             {
@@ -387,28 +389,28 @@ namespace CourseWork
         //По количественному составу авторского коллектива и годам
         public static void Create_authors_years_distrib()
         {
-            foreach (var item in Publications)
+            foreach (var item in publications)
             {
                 if (item.year == "" || item.authors.Count == 0) continue;
-                var element = Authors_years_count.Find(a => a.year == item.year && a.author_count == item.authors.Count);
+                var element = authorsYearsCount.Find(a => a.year == item.year && a.author_count == item.authors.Count);
                 if (element != null)
                 {
                     element.publication_count++;
                 }
                 else
                 {
-                    Author_year_count it = new Author_year_count(item.authors.Count, item.year);
-                    Authors_years_count.Add(it);
-                    if (!author_count.Contains(item.authors.Count)) author_count.Add(item.authors.Count);
+                    AuthorYearCount it = new AuthorYearCount(item.authors.Count, item.year);
+                    authorsYearsCount.Add(it);
+                    if (!authorCount.Contains(item.authors.Count)) authorCount.Add(item.authors.Count);
                 }
             }
-            author_count.Sort((a, b) => b.CompareTo(a));
-            Authors_years_count.Sort((a, b) => b.year.CompareTo(a.year));
+            authorCount.Sort((a, b) => b.CompareTo(a));
+            authorsYearsCount.Sort((a, b) => b.year.CompareTo(a.year));
         }
         private void AuthorsYearsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Clear_table();
-            if (Authors_years_count.Count > 0)
+            if (authorsYearsCount.Count > 0)
                 ShowTable3();
             else
             {
@@ -420,7 +422,7 @@ namespace CourseWork
         //Распределние по типу публикаций
         public static void Create_type_publications()
         {
-            foreach (var item in Publications)
+            foreach (var item in publications)
             {
                 if (item.isbn != "")
                 {
@@ -434,12 +436,14 @@ namespace CourseWork
                 {
                     typesCount.conference_count++;
 
-                    var elem = conferences.Find(a => a.name == item.note);
-                    YearCount newElem = new YearCount(item.note, item.year);
+                    var elem = conferences.Find(a => a.name == item.note && a.year == item.year);
                     if (elem != null)
                         elem.count++;
                     else
+                    {
+                        YearCountType newElem = new YearCountType(item.note, item.year);
                         conferences.Add(newElem);
+                    }
                     if (!conferencesYears.Contains(item.year))
                         conferencesYears.Add(item.year);
                     
@@ -450,12 +454,14 @@ namespace CourseWork
                 {
                     typesCount.journal_count++;
 
-                    var elem = journals.Find(a => a.name == item.journal);
-                    YearCount newElem = new YearCount(item.journal, item.year);
+                    var elem = journals.Find(a => a.name == item.journal && a.year == item.year);
                     if (elem != null)
                         elem.count++;
                     else
+                    {
+                        YearCountType newElem = new YearCountType(item.journal, item.year);
                         journals.Add(newElem);
+                    }
                     if (!journalsYears.Contains(item.year))
                        journalsYears.Add(item.year);
 
@@ -516,7 +522,7 @@ namespace CourseWork
             if (variant == 1)
                 header = "Год";
             else
-                header = "Ключевое слово (" + Keywords_count.Count.ToString() + ")";
+                header = "Ключевое слово (" + keywordsCount.Count.ToString() + ")";
 
             for (int i = 0; i < 2; i++)
             {
@@ -534,14 +540,14 @@ namespace CourseWork
             dataGridView1.AllowUserToAddRows = false;
 
             if (variant == 1)
-                foreach (var item in Years_count)
+                foreach (var item in yearsCount)
                 {
                     dataGridView1.Rows.Add();
                     dataGridView1[0, dataGridView1.Rows.Count - 1].Value = item.year;
                     dataGridView1[1, dataGridView1.Rows.Count - 1].Value = item.publication_count;
                 }
             else
-                foreach (var item in Keywords_count)
+                foreach (var item in keywordsCount)
                 {
                     dataGridView1.Rows.Add();
                     dataGridView1[0, dataGridView1.Rows.Count - 1].Value = item.keyword.Substring(0, 1).ToUpper() +
@@ -563,24 +569,26 @@ namespace CourseWork
             column0.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             column0.ReadOnly = true;
             column0.Width = 230;
+            column0.Frozen = true;
             column0.CellTemplate = new DataGridViewTextBoxCell();
             dataGridView1.Columns.Add(column0);
 
-            for (int i = 0, aCnt = author_count.Count; i < aCnt; i++)
+            for (int i = 0, aCnt = authorCount.Count; i < aCnt; i++)
             {
                 var current_column = new DataGridViewColumn();
                 current_column.HeaderCell.Style.Font = new System.Drawing.Font(dataGridView1.DefaultCellStyle.Font, FontStyle.Bold);
-                current_column.HeaderText = author_count[i].ToString();
+                current_column.HeaderText = authorCount[i].ToString();
                 current_column.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 current_column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 current_column.ReadOnly = true;
-                current_column.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                if (aCnt <= 20)
+                    current_column.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                 current_column.CellTemplate = new DataGridViewTextBoxCell();
                 dataGridView1.Columns.Add(current_column);
             }
             dataGridView1.AllowUserToAddRows = false;
 
-            foreach (var item in Authors_years_count)
+            foreach (var item in authorsYearsCount)
             {
                 if (dataGridView1.Rows.Count == 0 ||
                     dataGridView1[0, dataGridView1.Rows.Count - 1].Value.ToString() != item.year)
@@ -588,7 +596,7 @@ namespace CourseWork
                     dataGridView1.Rows.Add();
                     dataGridView1[0, dataGridView1.Rows.Count - 1].Value = item.year;
                 }
-                dataGridView1[author_count.FindIndex(x => x == item.author_count) + 1, dataGridView1.Rows.Count - 1].Value
+                dataGridView1[authorCount.FindIndex(x => x == item.author_count) + 1, dataGridView1.Rows.Count - 1].Value
                     = item.publication_count;
             }
 
@@ -644,7 +652,50 @@ namespace CourseWork
 
         private void ShowTable5()
         {
+            var column0 = new DataGridViewColumn();
+            column0.HeaderCell.Style.Font = new System.Drawing.Font(dataGridView1.DefaultCellStyle.Font, FontStyle.Bold);
+            column0.HeaderText = "Журнал " + @"\" + " Год";
+            column0.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            column0.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            column0.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            column0.ReadOnly = true;
+            column0.Width = 350;
+            column0.Frozen = true;
+            column0.CellTemplate = new DataGridViewTextBoxCell();
+            dataGridView1.Columns.Add(column0);
 
+            for (int i = 0, cnt = journalsYears.Count; i < cnt; i++)
+            {
+                var current_column = new DataGridViewColumn();
+                current_column.HeaderCell.Style.Font = new System.Drawing.Font(dataGridView1.DefaultCellStyle.Font, FontStyle.Bold);
+                current_column.HeaderText = journalsYears[i].ToString();
+                current_column.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                current_column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                current_column.ReadOnly = true;
+                if (cnt <= 10)
+                    current_column.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                current_column.CellTemplate = new DataGridViewTextBoxCell();
+                dataGridView1.Columns.Add(current_column);
+            }
+            dataGridView1.AllowUserToAddRows = false;
+
+            List<string> names = new List<string>();
+
+            foreach (var item in journals)
+            {
+                if (!names.Contains(item.name))
+                {
+                    dataGridView1.Rows.Add();
+                    dataGridView1[0, dataGridView1.Rows.Count - 1].Value = item.name;
+                    names.Add(item.name);
+                }
+
+                dataGridView1[journalsYears.FindIndex(x => x == item.year) + 1,
+                    names.FindIndex(x => x == item.name)].Value = item.count;
+            }
+
+            type = 6;
+            DiagrammToolStripMenuItem.Enabled = false;
         }
 
         private void ShowTable6()
@@ -654,8 +705,10 @@ namespace CourseWork
             column0.HeaderText = "Конференция " + @"\" + " Год";
             column0.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
             column0.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            column0.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             column0.ReadOnly = true;
             column0.Width = 350;
+            column0.Frozen = true;
             column0.CellTemplate = new DataGridViewTextBoxCell();
             dataGridView1.Columns.Add(column0);
 
@@ -667,23 +720,26 @@ namespace CourseWork
                 current_column.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 current_column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 current_column.ReadOnly = true;
-                current_column.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                if (cnt <= 10)
+                    current_column.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                 current_column.CellTemplate = new DataGridViewTextBoxCell();
                 dataGridView1.Columns.Add(current_column);
             }
             dataGridView1.AllowUserToAddRows = false;
 
+            List<string> names = new List<string>();
+
             foreach (var item in conferences)
             {
-                if (dataGridView1.Rows.Count == 0 ||
-                    dataGridView1[0, dataGridView1.Rows.Count - 1].Value.ToString() != item.name)
+                if (!names.Contains(item.name))
                 {
                     dataGridView1.Rows.Add();
                     dataGridView1[0, dataGridView1.Rows.Count - 1].Value = item.name;
+                    names.Add(item.name);
                 }
                 
-                dataGridView1[conferencesYears.FindIndex(x => x == item.year) + 1, dataGridView1.Rows.Count - 1].Value
-                    = item.count;
+                dataGridView1[conferencesYears.FindIndex(x => x == item.year) + 1,
+                    names.FindIndex(x => x == item.name)].Value = item.count;
             }
             
             type = 6;
@@ -700,7 +756,7 @@ namespace CourseWork
             column0.CellTemplate = new DataGridViewTextBoxCell();
             var column1 = new DataGridViewColumn();
             column1.HeaderCell.Style.Font = new System.Drawing.Font(dataGridView1.DefaultCellStyle.Font, FontStyle.Bold);
-            column1.HeaderText = "Публикации (" + Publications.Count.ToString() + ")";
+            column1.HeaderText = "Публикации (" + publications.Count.ToString() + ")";
             column1.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
             column1.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             column1.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
@@ -713,24 +769,24 @@ namespace CourseWork
             dataGridView1.Columns.Add(column1);
             dataGridView1.AllowUserToAddRows = false;
 
-            foreach (var item in Publications)
+            foreach (var item in publications)
             {
                 dataGridView1.Rows.Add();
                 dataGridView1[0, dataGridView1.Rows.Count - 1].Value = item.id;
                 dataGridView1[1, dataGridView1.Rows.Count - 1].Value = item.title;
             }
 
-            FilterPublications = Publications;
+            filterPublications = publications;
             is_list = true;
         }
 
         //Показ информации о публикации
         private void dataGridView1_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if (dataGridView1.Columns[1].HeaderText.ToString() == "Публикации (" + Publications.Count.ToString() + ")")
+            if (dataGridView1.Columns[1].HeaderText.ToString() == "Публикации (" + publications.Count.ToString() + ")")
             {
                 int id = int.Parse(dataGridView1[0, e.RowIndex].Value.ToString());
-                var element = Publications.Find(a => a.id == id);
+                var element = publications.Find(a => a.id == id);
 
                 string str = Functions.GetInformation(element);
                 MessageBox.Show(str, "Information");
@@ -746,8 +802,8 @@ namespace CourseWork
             if (fileName != String.Empty)
             {
                 Cur_status.Text = "Cохранение...";
-                await Task.Run(() => Excel_Distrib.Creating_Excel_Distributions(fileName, Years_count, Keywords_count,
-                    Authors_years_count, author_count, typesCount));
+                await Task.Run(() => Excel_Distrib.Creating_Excel_Distributions(fileName, yearsCount, keywordsCount,
+                    authorsYearsCount, authorCount, typesCount, conferences, conferencesYears, journals, journalsYears));
                 Cur_status.Text = "";
             }
             else
@@ -761,7 +817,7 @@ namespace CourseWork
             if (fileName != String.Empty)
             {
                 Cur_status.Text = "Cохранение...";
-                await Task.Run(() => Word_List.Creating_Word_Lists(fileName, FilterPublications));
+                await Task.Run(() => Word_List.Creating_Word_Lists(fileName, filterPublications));
                 Cur_status.Text = "";
             }
             else return;

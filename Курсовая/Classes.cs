@@ -42,11 +42,11 @@ namespace CourseWork
     }
 
     //Для распределения по годам
-    public class Year_count
+    public class YearCount
     {
         public string year;
         public int publication_count;
-        public Year_count(string year)
+        public YearCount(string year)
         {
             this.year = year;
             publication_count = 1;
@@ -54,11 +54,11 @@ namespace CourseWork
     }
 
     //Для распределения по ключевым словам
-    public class Keyword_count
+    public class KeywordCount
     {
         public string keyword;
         public int publication_count;
-        public Keyword_count(string keyword)
+        public KeywordCount(string keyword)
         {
             this.keyword = keyword;
             publication_count = 1;
@@ -66,12 +66,12 @@ namespace CourseWork
     }
 
     //Для распределения по количественному составу авторского коллектива и годам
-    public class Author_year_count
+    public class AuthorYearCount
     {
         public int author_count;
         public string year;
         public int publication_count;
-        public Author_year_count(int author_count, string year)
+        public AuthorYearCount(int author_count, string year)
         {
             this.author_count = author_count;
             this.year = year;
@@ -80,14 +80,22 @@ namespace CourseWork
     }
 
     //Для распределения по типам
-    public class Type_count
+    public class TypeCount
     {
         public int journal_count;
         public int conference_count;
         public int book_count;
         //public int other_count;
 
-        public Type_count()
+        public TypeCount()
+        {
+            this.journal_count = 0;
+            this.conference_count = 0;
+            this.book_count = 0;
+            //this.other_count = 0;
+        }
+
+        public void Clear()
         {
             this.journal_count = 0;
             this.conference_count = 0;
@@ -97,12 +105,12 @@ namespace CourseWork
     }
 
     //Для распределения по кол-ву журналов (конференциий) и годам
-    public class YearCount
+    public class YearCountType
     {
         public string name;
         public string year;
         public int count;
-        public YearCount(string name, string year)
+        public YearCountType(string name, string year)
         {
             this.name = name;
             this.year = year;

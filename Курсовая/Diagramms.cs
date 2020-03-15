@@ -55,9 +55,9 @@ namespace CourseWork
                     Diagramm.Titles.Add("Распределение публикаций по годам").Font = new Font("Calibri", 16f);
                     Diagramm.ChartAreas["first"].AxisY.Title = "Кол-во публикаций";
 
-                    for (int i = 0, yCnt = MainForm.Years_count.Count; i < yCnt; i++)
-                        Diagramm.Series["first"].Points.AddXY(MainForm.Years_count[i].year,
-                            MainForm.Years_count[i].publication_count);
+                    for (int i = 0, yCnt = MainForm.yearsCount.Count; i < yCnt; i++)
+                        Diagramm.Series["first"].Points.AddXY(MainForm.yearsCount[i].year,
+                            MainForm.yearsCount[i].publication_count);
 
                     if (Diagramm.Series["first"].Points.Count > 20)
                     {
@@ -71,9 +71,9 @@ namespace CourseWork
                         "показаны первые 100 значений)").Font = new Font("Calibri", 16f);
                     Diagramm.ChartAreas["first"].AxisY.Title = "Кол-во публикаций";
 
-                    for (int i = 0, kwCnt = MainForm.Keywords_count.Count; i < kwCnt && i < 100; i++)
-                        Diagramm.Series["first"].Points.AddXY(MainForm.Keywords_count[i].keyword,
-                            MainForm.Keywords_count[i].publication_count);
+                    for (int i = 0, kwCnt = MainForm.keywordsCount.Count; i < kwCnt && i < 100; i++)
+                        Diagramm.Series["first"].Points.AddXY(MainForm.keywordsCount[i].keyword,
+                            MainForm.keywordsCount[i].publication_count);
 
                     if (Diagramm.Series["first"].Points.Count > 20)
                     {
@@ -124,9 +124,9 @@ namespace CourseWork
                 case 1:
                     Diagramm.Titles.Add("Распределение публикаций по годам").Font = new Font("Calibri", 16f);
 
-                    for (int i = 0, yCnt = MainForm.Years_count.Count; i < yCnt; i++)
-                        Diagramm.Series["first"].Points.AddXY(MainForm.Years_count[i].year,
-                            MainForm.Years_count[i].publication_count);
+                    for (int i = 0, yCnt = MainForm.yearsCount.Count; i < yCnt; i++)
+                        Diagramm.Series["first"].Points.AddXY(MainForm.yearsCount[i].year,
+                            MainForm.yearsCount[i].publication_count);
 
                     
                     double total1 = Diagramm.Series["first"].Points.Sum(item => item.YValues[0]);
@@ -144,9 +144,9 @@ namespace CourseWork
                     Diagramm.Titles.Add("Распределение публикаций по ключевым словам\n(" +
                         "показаны первые 30 значений)").Font = new Font("Calibri", 16f);
 
-                    for (int i = 0, kwCnt = MainForm.Keywords_count.Count; i < kwCnt && i < 30; i++)
-                        Diagramm.Series[0].Points.AddXY(MainForm.Keywords_count[i].keyword,
-                            MainForm.Keywords_count[i].publication_count);
+                    for (int i = 0, kwCnt = MainForm.keywordsCount.Count; i < kwCnt && i < 30; i++)
+                        Diagramm.Series[0].Points.AddXY(MainForm.keywordsCount[i].keyword,
+                            MainForm.keywordsCount[i].publication_count);
 
                     double total2 = Diagramm.Series["first"].Points.Sum(item => item.YValues[0]);
                     foreach (var point in Diagramm.Series["first"].Points)
