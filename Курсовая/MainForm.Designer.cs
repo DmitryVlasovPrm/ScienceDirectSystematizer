@@ -58,7 +58,7 @@
             // 
             // dataGridView1
             // 
-            this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.InactiveCaption;
+            this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -231,6 +231,7 @@
             this.задатьПараметрыПоискаToolStripMenuItem.Name = "задатьПараметрыПоискаToolStripMenuItem";
             this.задатьПараметрыПоискаToolStripMenuItem.Size = new System.Drawing.Size(299, 28);
             this.задатьПараметрыПоискаToolStripMenuItem.Text = "Задать параметры поиска";
+            this.задатьПараметрыПоискаToolStripMenuItem.Click += new System.EventHandler(this.задатьПараметрыПоискаToolStripMenuItem_Click);
             // 
             // Cur_status
             // 

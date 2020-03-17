@@ -53,12 +53,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Excel_Distrib.cs" />
+    <Compile Include="BibTeX.cs" />
+    <Compile Include="ExcelDistrib.cs" />
     <Compile Include="Diagramms.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Diagramms.Designer.cs">
       <DependentUpon>Diagramms.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Filtration.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Filtration.Designer.cs">
+      <DependentUpon>Filtration.cs</DependentUpon>
     </Compile>
     <Compile Include="Functions.cs" />
     <Compile Include="MainForm.cs">
@@ -70,9 +77,12 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Classes.cs" />
-    <Compile Include="Word_List.cs" />
+    <Compile Include="WordList.cs" />
     <EmbeddedResource Include="Diagramms.resx">
       <DependentUpon>Diagramms.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Filtration.resx">
+      <DependentUpon>Filtration.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

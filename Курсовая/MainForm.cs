@@ -798,11 +798,11 @@ namespace CourseWork
         //Сохранение распределений в Excel
         private async void SaveExcelToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string fileName = Excel_Distrib.fileOpen();
+            string fileName = ExcelDistrib.FileOpen();
             if (fileName != String.Empty)
             {
                 Cur_status.Text = "Cохранение...";
-                await Task.Run(() => Excel_Distrib.Creating_Excel_Distributions(fileName, yearsCount, keywordsCount,
+                await Task.Run(() => ExcelDistrib.CreatingExcelDistributions(fileName, yearsCount, keywordsCount,
                     authorsYearsCount, authorCount, typesCount, conferences, conferencesYears, journals, journalsYears));
                 Cur_status.Text = "";
             }
@@ -813,20 +813,27 @@ namespace CourseWork
         //Сохранение списка в Word
         private async void SaveWordToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string fileName = Word_List.fileOpen();
+            string fileName = WordList.FileOpen();
             if (fileName != String.Empty)
             {
                 Cur_status.Text = "Cохранение...";
-                await Task.Run(() => Word_List.Creating_Word_Lists(fileName, filterPublications));
+                await Task.Run(() => WordList.CreatingWordList(fileName, filterPublications));
                 Cur_status.Text = "";
             }
             else return;
         }
 
         //Сохранение списка в BibTeX
-        private void SaveBibTeXToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void SaveBibTeXToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            string fileName = BibTeX.FileOpen();
+            if (fileName != String.Empty)
+            {
+                Cur_status.Text = "Cохранение...";
+                await Task.Run(() => BibTeX.CreatingList(fileName, filterPublications));
+                Cur_status.Text = "";
+            }
+            else return;
         }
         #endregion
 
@@ -836,6 +843,14 @@ namespace CourseWork
         {
             Diagramms diagr = new Diagramms(type);
             diagr.Show();
+        }
+        #endregion
+
+        #region Фильтрация
+        private void задатьПараметрыПоискаToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Filtration filtForm = new Filtration();
+            filtForm.ShowDialog(this);
         }
         #endregion
     }
