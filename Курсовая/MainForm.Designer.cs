@@ -34,7 +34,8 @@
             this.FileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.OpenFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.SaveWordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SaveWordIEEEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SaveWordGOSTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveExcelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveBibTeXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DistributionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -92,7 +93,8 @@
             this.FileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.OpenFileToolStripMenuItem,
             this.toolStripSeparator1,
-            this.SaveWordToolStripMenuItem,
+            this.SaveWordIEEEToolStripMenuItem,
+            this.SaveWordGOSTToolStripMenuItem,
             this.SaveExcelToolStripMenuItem,
             this.SaveBibTeXToolStripMenuItem});
             this.FileToolStripMenuItem.Name = "FileToolStripMenuItem";
@@ -111,12 +113,19 @@
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(457, 6);
             // 
-            // SaveWordToolStripMenuItem
+            // SaveWordIEEEToolStripMenuItem
             // 
-            this.SaveWordToolStripMenuItem.Name = "SaveWordToolStripMenuItem";
-            this.SaveWordToolStripMenuItem.Size = new System.Drawing.Size(460, 28);
-            this.SaveWordToolStripMenuItem.Text = "Сохранить список публикаций в Word";
-            this.SaveWordToolStripMenuItem.Click += new System.EventHandler(this.SaveWordToolStripMenuItem_Click);
+            this.SaveWordIEEEToolStripMenuItem.Name = "SaveWordIEEEToolStripMenuItem";
+            this.SaveWordIEEEToolStripMenuItem.Size = new System.Drawing.Size(460, 28);
+            this.SaveWordIEEEToolStripMenuItem.Text = "Сохранить список публикаций в Word (IEEE)";
+            this.SaveWordIEEEToolStripMenuItem.Click += new System.EventHandler(this.SaveWordIEEEToolStripMenuItem_Click);
+            // 
+            // SaveWordGOSTToolStripMenuItem
+            // 
+            this.SaveWordGOSTToolStripMenuItem.Name = "SaveWordGOSTToolStripMenuItem";
+            this.SaveWordGOSTToolStripMenuItem.Size = new System.Drawing.Size(460, 28);
+            this.SaveWordGOSTToolStripMenuItem.Text = "Сохранить список публикаций в Word (ГОСТ)";
+            this.SaveWordGOSTToolStripMenuItem.Click += new System.EventHandler(this.SaveWordGOSTToolStripMenuItem_Click);
             // 
             // SaveExcelToolStripMenuItem
             // 
@@ -277,7 +286,7 @@
 
         #endregion
         private System.Windows.Forms.ToolStripMenuItem FileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem SaveWordToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem SaveWordGOSTToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem SaveExcelToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem OpenFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
@@ -299,6 +308,7 @@
         private System.Windows.Forms.ToolStripTextBox Cur_status;
         private System.Windows.Forms.ToolStripMenuItem JournalYearToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ConferenceYearToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem SaveWordIEEEToolStripMenuItem;
     }
 }
 

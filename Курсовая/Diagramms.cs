@@ -87,9 +87,9 @@ namespace CourseWork
                     Diagramm.Titles.Add("Распределение публикаций по типу публикации").Font = new Font("Calibri", 16f);
                     Diagramm.ChartAreas["first"].AxisY.Title = "Кол-во публикаций";
 
-                    Diagramm.Series["first"].Points.AddXY("Книги", MainForm.typesCount.book_count);
-                    Diagramm.Series["first"].Points.AddXY("Журналы", MainForm.typesCount.journal_count);
-                    Diagramm.Series["first"].Points.AddXY("Конференции", MainForm.typesCount.conference_count);
+                    Diagramm.Series["first"].Points.AddXY("Книги", MainForm.typesCount.bookPubl.Count);
+                    Diagramm.Series["first"].Points.AddXY("Журналы", MainForm.typesCount.journalPubl.Count);
+                    Diagramm.Series["first"].Points.AddXY("Конференции", MainForm.typesCount.conferencePubl.Count);
 
                     break;
             }
@@ -162,9 +162,9 @@ namespace CourseWork
                 case 4:
                     Diagramm.Titles.Add("Распределение публикаций по типу публикации").Font = new Font("Calibri", 16f);
 
-                    Diagramm.Series["first"].Points.AddXY("Книги", MainForm.typesCount.book_count);
-                    Diagramm.Series["first"].Points.AddXY("Журналы", MainForm.typesCount.journal_count);
-                    Diagramm.Series["first"].Points.AddXY("Конференции", MainForm.typesCount.conference_count);
+                    Diagramm.Series["first"].Points.AddXY("Книги", MainForm.typesCount.bookPubl.Count);
+                    Diagramm.Series["first"].Points.AddXY("Журналы", MainForm.typesCount.journalPubl.Count);
+                    Diagramm.Series["first"].Points.AddXY("Конференции", MainForm.typesCount.conferencePubl.Count);
 
                     double total4 = Diagramm.Series["first"].Points.Sum(item => item.YValues[0]);
                     foreach (var point in Diagramm.Series["first"].Points)

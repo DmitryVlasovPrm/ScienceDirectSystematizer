@@ -16,6 +16,9 @@ namespace CourseWork
             if (item.type != "") str += "type = \"" + item.type + "\"\n";
             if (item.tag != "") str += "tag = \"" + item.tag + "\"\n";
             if (item.title != "") str += "title = \"" + item.title + "\"\n";
+            if (item.editor != "") str += "editor = \"" + item.editor + "\"\n";
+            if (item.booktitle != "") str += "booktitle = \"" + item.booktitle + "\"\n";
+            if (item.publisher != "") str += "publisher = \"" + item.publisher + "\"\n";
             if (item.journal != "") str += "journal = \"" + item.journal + "\"\n";
             if (item.volume != "") str += "volume = \"" + item.volume + "\"\n";
             if (item.pages != "")  str += "pages = \"" + item.pages + "\"\n";
@@ -55,6 +58,9 @@ namespace CourseWork
 
             str += "@" + item.type + "{" + item.tag + ",\n";
             if (item.title != "") str += "title = \"" + item.title + "\",\n";
+            if (item.editor != "") str += "editor = \"" + item.editor + "\",\n";
+            if (item.booktitle != "") str += "booktitle = \"" + item.booktitle + "\",\n";
+            if (item.publisher != "") str += "publisher = \"" + item.publisher + "\",\n";
             if (item.journal != "") str += "journal = \"" + item.journal + "\",\n";
             if (item.volume != "") str += "volume = \"" + item.volume + "\",\n";
             if (item.pages != "") str += "pages = \"" + item.pages + "\",\n";

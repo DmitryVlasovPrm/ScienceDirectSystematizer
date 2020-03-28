@@ -13,6 +13,9 @@ namespace CourseWork
         public string type;
         public string tag;
         public string title;
+        public string editor;
+        public string booktitle;
+        public string publisher;
         public string journal;
         public string volume;
         public string pages;
@@ -22,13 +25,17 @@ namespace CourseWork
         public string doi;
         public List<string> authors = new List<string>();
         public List<string> keywords = new List<string>();
-        public Publication(int id, string type, string tag, string title, string journal, string volume,
-            string pages, string year, string note, string isbn, string doi, List<string> authors, List<string> keywords)
+        public Publication(int id, string type, string tag, string title, string editor, string booktitle, 
+            string publisher, string journal, string volume, string pages, string year, string note,
+            string isbn, string doi, List<string> authors, List<string> keywords)
         {
             this.id = id;
             this.type = type;
             this.tag = tag;
             this.title = title;
+            this.editor = editor;
+            this.booktitle = booktitle;
+            this.publisher = publisher;
             this.journal = journal;
             this.volume = volume;
             this.pages = pages;
@@ -82,24 +89,24 @@ namespace CourseWork
     //Для распределения по типам
     public class TypeCount
     {
-        public int journal_count;
-        public int conference_count;
-        public int book_count;
+        public List<Publication> journalPubl;
+        public List<Publication> conferencePubl;
+        public List<Publication> bookPubl;
         //public int other_count;
 
         public TypeCount()
         {
-            this.journal_count = 0;
-            this.conference_count = 0;
-            this.book_count = 0;
+            this.journalPubl = new List<Publication>();
+            this.conferencePubl = new List<Publication>();
+            this.bookPubl = new List<Publication>();
             //this.other_count = 0;
         }
 
         public void Clear()
         {
-            this.journal_count = 0;
-            this.conference_count = 0;
-            this.book_count = 0;
+            this.journalPubl.Clear();
+            this.conferencePubl.Clear();
+            this.bookPubl.Clear();
             //this.other_count = 0;
         }
     }

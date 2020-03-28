@@ -22,7 +22,8 @@ namespace CourseWork
             type = 0;
             is_list = false;
             Open_file = false;
-            SaveWordToolStripMenuItem.Enabled = false; SaveExcelToolStripMenuItem.Enabled = false;
+            SaveWordGOSTToolStripMenuItem.Enabled = false; SaveExcelToolStripMenuItem.Enabled = false;
+            SaveWordIEEEToolStripMenuItem.Enabled = false;
             SaveBibTeXToolStripMenuItem.Enabled = false;
             DistributionToolStripMenuItem.Enabled = false; ViewToolStripMenuItem.Enabled = false;
             SearchToolStripMenuItem.Enabled = false;
@@ -44,12 +45,14 @@ namespace CourseWork
                 _list = value;
                 if (_list)
                 {
-                    SaveWordToolStripMenuItem.Enabled = true;
+                    SaveWordGOSTToolStripMenuItem.Enabled = true;
+                    SaveWordIEEEToolStripMenuItem.Enabled = true;
                     SaveBibTeXToolStripMenuItem.Enabled = true;
                 }
                 else
                 {
-                    SaveWordToolStripMenuItem.Enabled = false;
+                    SaveWordGOSTToolStripMenuItem.Enabled = false;
+                    SaveWordIEEEToolStripMenuItem.Enabled = false;
                     SaveBibTeXToolStripMenuItem.Enabled = false;
                 }
             }
@@ -61,17 +64,17 @@ namespace CourseWork
 
         #region Списки
         //Список всех публикаций
-        static List<Publication> publications = new List<Publication>();
+        public static List<Publication> publications = new List<Publication>();
         //Списки для распределений
         public static List<YearCount> yearsCount = new List<YearCount>();
         public static List<KeywordCount> keywordsCount = new List<KeywordCount>();
-        static List<AuthorYearCount> authorsYearsCount = new List<AuthorYearCount>(); static List<int> authorCount = new List<int>();
+        public static List<AuthorYearCount> authorsYearsCount = new List<AuthorYearCount>(); static List<int> authorCount = new List<int>();
         
         public static TypeCount typesCount = new TypeCount(); public static bool typeFlag = false;
         public static List<YearCountType> journals = new List<YearCountType>(); public static List<YearCountType> conferences = new List<YearCountType>();
         static List<string> journalsYears = new List<string>(); static List<string> conferencesYears = new List<string>();
         //Список для поиска
-        static List<Publication> filterPublications = new List<Publication>();
+        public static List<Publication> filterPublications = new List<Publication>();
         #endregion
 
         #region Открытие файла и чтение из него
@@ -144,17 +147,19 @@ namespace CourseWork
 
                 using (StreamReader sr = new StreamReader(path, Encoding.Default))
                 {
+                    bool isTitle = false;
                     string line, buffer = "";
-                    string tag = "", type = "", title = "", journal = "", volume = "", year = "", note = "", 
-                        pages = "", isbn = "", doi = "";
+                    string tag = "", type = "", title = "", editor = "", booktitle = "", publisher = "", journal = "",
+                    volume = "", year = "", note = "", pages = "", isbn = "", doi = "";
                     List<string> authors = new List<string>(); List<string> keywords = new List<string>();
+
                     while ((line = sr.ReadLine()) != null)
                     {
                         buffer += line;
                         if (buffer == "}")
                         {
-                            Publication item = new Publication(id, type, tag, title, journal, volume,
-                                pages, year, note, isbn, doi, authors, keywords);
+                            Publication item = new Publication(id, type, tag, title, editor, booktitle, publisher,
+                                journal, volume, pages, year, note, isbn, doi, authors, keywords);
 
                             if (!CheckDuplicate(item))
                             {
@@ -162,8 +167,10 @@ namespace CourseWork
                                 id++;
                             }
 
+                            isTitle = false;
                             keywords.Clear(); authors.Clear();
-                            buffer = tag = type = title = journal = volume = year = note = pages = isbn = doi = "";
+                            buffer = tag = type = title = editor = booktitle = publisher = journal =
+                                volume = year = note = pages = isbn = doi = "";
                         }
                         else
                         {
@@ -176,7 +183,14 @@ namespace CourseWork
                                 tag = buffer.Substring(buffer.IndexOf('{') + 1, buffer.LastIndexOf(',') - buffer.IndexOf('{') - 1);
                             }
 
-                            if (buffer.Contains("title = ")) title = ParseLine(buffer);
+                            if (buffer.Contains("title = ") && isTitle == false)
+                            {
+                                title = ParseLine(buffer);
+                                isTitle = true;
+                            }
+                            if (buffer.Contains("editor = ")) editor = ParseLine(buffer);
+                            if (buffer.Contains("booktitle = ")) booktitle = ParseLine(buffer);
+                            if (buffer.Contains("publisher = ")) publisher = ParseLine(buffer);
                             if (buffer.Contains("journal = ")) journal = ParseLine(buffer);
                             if (buffer.Contains("volume = ")) volume = ParseLine(buffer);
                             if (buffer.Contains("pages = ")) pages = ParseLine(buffer);
@@ -426,7 +440,7 @@ namespace CourseWork
             {
                 if (item.isbn != "")
                 {
-                    typesCount.book_count++;
+                    typesCount.bookPubl.Add(item);
                     continue;
                 }
 
@@ -434,7 +448,7 @@ namespace CourseWork
                         item.note.ToLower().Contains("issue") || item.note.ToLower().Contains("celebrating") ||
                             item.journal.ToLower().Contains("procedia"))
                 {
-                    typesCount.conference_count++;
+                    typesCount.conferencePubl.Add(item);
 
                     var elem = conferences.Find(a => a.name == item.note && a.year == item.year);
                     if (elem != null)
@@ -452,7 +466,7 @@ namespace CourseWork
 
                 if (item.journal != "" && item.volume != "")
                 {
-                    typesCount.journal_count++;
+                    typesCount.journalPubl.Add(item);
 
                     var elem = journals.Find(a => a.name == item.journal && a.year == item.year);
                     if (elem != null)
@@ -630,15 +644,15 @@ namespace CourseWork
                 {
                     case 0:
                         name = "Конференции";
-                        count = typesCount.conference_count;
+                        count = typesCount.conferencePubl.Count;
                         break;
                     case 1:
                         name = "Журналы";
-                        count = typesCount.journal_count;
+                        count = typesCount.journalPubl.Count;
                         break;
                     case 2:
                         name = "Книги";
-                        count = typesCount.book_count;
+                        count = typesCount.bookPubl.Count;
                         break;
                 }
 
@@ -750,13 +764,33 @@ namespace CourseWork
         #region Вывод всех публикаций и поиск + вывод всей информации о выбранной публикации
         private void ShowAllPublicationToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            filterPublications = publications;
+            ShowFilter();
+        }
+
+        //Показ информации о публикации
+        private void dataGridView1_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (is_list)
+            {
+                int id = int.Parse(dataGridView1[0, e.RowIndex].Value.ToString());
+                var element = filterPublications.Find(a => a.id == id);
+
+                string str = Functions.GetInformation(element);
+                MessageBox.Show(str, "Information");
+            }
+        }
+
+        //Показ filtePublication
+        private void ShowFilter()
+        {
             Clear_table();
             var column0 = new DataGridViewColumn();
             column0.Visible = false;
             column0.CellTemplate = new DataGridViewTextBoxCell();
             var column1 = new DataGridViewColumn();
             column1.HeaderCell.Style.Font = new System.Drawing.Font(dataGridView1.DefaultCellStyle.Font, FontStyle.Bold);
-            column1.HeaderText = "Публикации (" + publications.Count.ToString() + ")";
+            column1.HeaderText = "Публикации (" + filterPublications.Count.ToString() + ")";
             column1.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
             column1.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             column1.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
@@ -769,28 +803,13 @@ namespace CourseWork
             dataGridView1.Columns.Add(column1);
             dataGridView1.AllowUserToAddRows = false;
 
-            foreach (var item in publications)
+            foreach (var item in filterPublications)
             {
                 dataGridView1.Rows.Add();
                 dataGridView1[0, dataGridView1.Rows.Count - 1].Value = item.id;
                 dataGridView1[1, dataGridView1.Rows.Count - 1].Value = item.title;
             }
-
-            filterPublications = publications;
             is_list = true;
-        }
-
-        //Показ информации о публикации
-        private void dataGridView1_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            if (dataGridView1.Columns[1].HeaderText.ToString() == "Публикации (" + publications.Count.ToString() + ")")
-            {
-                int id = int.Parse(dataGridView1[0, e.RowIndex].Value.ToString());
-                var element = publications.Find(a => a.id == id);
-
-                string str = Functions.GetInformation(element);
-                MessageBox.Show(str, "Information");
-            }
         }
         #endregion
 
@@ -811,13 +830,27 @@ namespace CourseWork
         }
 
         //Сохранение списка в Word
-        private async void SaveWordToolStripMenuItem_Click(object sender, EventArgs e)
+        //ГОСТ
+        private async void SaveWordGOSTToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string fileName = WordList.FileOpen();
+            string fileName = WordList.FileOpen(1);
             if (fileName != String.Empty)
             {
                 Cur_status.Text = "Cохранение...";
-                await Task.Run(() => WordList.CreatingWordList(fileName, filterPublications));
+                await Task.Run(() => WordList.CreatingWordList(fileName, filterPublications, 1));
+                Cur_status.Text = "";
+            }
+            else return;
+        }
+
+        //IEEE
+        private async void SaveWordIEEEToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string fileName = WordList.FileOpen(2);
+            if (fileName != String.Empty)
+            {
+                Cur_status.Text = "Cохранение...";
+                await Task.Run(() => WordList.CreatingWordList(fileName, filterPublications, 2));
                 Cur_status.Text = "";
             }
             else return;
@@ -851,6 +884,7 @@ namespace CourseWork
         {
             Filtration filtForm = new Filtration();
             filtForm.ShowDialog(this);
+            if (filtForm.DialogResult == DialogResult.OK) ShowFilter();
         }
         #endregion
     }
