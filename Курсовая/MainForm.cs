@@ -137,7 +137,7 @@ namespace CourseWork
         private bool ReadInformation(string path, bool first_time)
         {
             //Список публикаций только для текущего файла
-            List<Publication> This_publications = new List<Publication>();
+            List<Publication> thisPublications = new List<Publication>();
 
             try
             {
@@ -163,7 +163,7 @@ namespace CourseWork
 
                             if (!CheckDuplicate(item))
                             {
-                                This_publications.Add(item);
+                                thisPublications.Add(item);
                                 id++;
                             }
 
@@ -222,7 +222,7 @@ namespace CourseWork
                     sr.Close();
                 }
 
-                publications.AddRange(This_publications);
+                publications.AddRange(thisPublications);
             }
             //Файл не удалось считать (ошибка)
             catch

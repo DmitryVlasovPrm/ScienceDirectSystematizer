@@ -222,8 +222,8 @@
             // SearchToolStripMenuItem
             // 
             this.SearchToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ShowAllPublicationToolStripMenuItem,
-            this.задатьПараметрыПоискаToolStripMenuItem});
+            this.задатьПараметрыПоискаToolStripMenuItem,
+            this.ShowAllPublicationToolStripMenuItem});
             this.SearchToolStripMenuItem.Name = "SearchToolStripMenuItem";
             this.SearchToolStripMenuItem.Size = new System.Drawing.Size(72, 27);
             this.SearchToolStripMenuItem.Text = "Поиск";
