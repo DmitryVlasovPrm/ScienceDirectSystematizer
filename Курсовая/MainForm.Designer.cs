@@ -49,9 +49,9 @@
             this.DiagrammToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ClearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SearchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ShowAllPublicationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.задатьПараметрыПоискаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.Cur_status = new System.Windows.Forms.ToolStripTextBox();
+            this.ShowAllPublicationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.curStatus = new System.Windows.Forms.ToolStripTextBox();
             this.currentStatus = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -81,7 +81,7 @@
             this.DistributionToolStripMenuItem,
             this.ViewToolStripMenuItem,
             this.SearchToolStripMenuItem,
-            this.Cur_status});
+            this.curStatus});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1282, 31);
@@ -228,29 +228,29 @@
             this.SearchToolStripMenuItem.Size = new System.Drawing.Size(72, 27);
             this.SearchToolStripMenuItem.Text = "Поиск";
             // 
-            // ShowAllPublicationToolStripMenuItem
-            // 
-            this.ShowAllPublicationToolStripMenuItem.Name = "ShowAllPublicationToolStripMenuItem";
-            this.ShowAllPublicationToolStripMenuItem.Size = new System.Drawing.Size(299, 28);
-            this.ShowAllPublicationToolStripMenuItem.Text = "Показать все публикации";
-            this.ShowAllPublicationToolStripMenuItem.Click += new System.EventHandler(this.ShowAllPublicationToolStripMenuItem_Click);
-            // 
             // задатьПараметрыПоискаToolStripMenuItem
             // 
             this.задатьПараметрыПоискаToolStripMenuItem.Name = "задатьПараметрыПоискаToolStripMenuItem";
-            this.задатьПараметрыПоискаToolStripMenuItem.Size = new System.Drawing.Size(299, 28);
-            this.задатьПараметрыПоискаToolStripMenuItem.Text = "Задать параметры поиска";
+            this.задатьПараметрыПоискаToolStripMenuItem.Size = new System.Drawing.Size(411, 28);
+            this.задатьПараметрыПоискаToolStripMenuItem.Text = "Задать параметры поиска и сортировки";
             this.задатьПараметрыПоискаToolStripMenuItem.Click += new System.EventHandler(this.задатьПараметрыПоискаToolStripMenuItem_Click);
             // 
-            // Cur_status
+            // ShowAllPublicationToolStripMenuItem
             // 
-            this.Cur_status.BackColor = System.Drawing.SystemColors.Control;
-            this.Cur_status.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.Cur_status.Enabled = false;
-            this.Cur_status.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Cur_status.Name = "Cur_status";
-            this.Cur_status.Size = new System.Drawing.Size(250, 27);
-            this.Cur_status.TextBoxTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.ShowAllPublicationToolStripMenuItem.Name = "ShowAllPublicationToolStripMenuItem";
+            this.ShowAllPublicationToolStripMenuItem.Size = new System.Drawing.Size(411, 28);
+            this.ShowAllPublicationToolStripMenuItem.Text = "Показать все публикации";
+            this.ShowAllPublicationToolStripMenuItem.Click += new System.EventHandler(this.ShowAllPublicationToolStripMenuItem_Click);
+            // 
+            // curStatus
+            // 
+            this.curStatus.BackColor = System.Drawing.SystemColors.Control;
+            this.curStatus.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.curStatus.Enabled = false;
+            this.curStatus.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.curStatus.Name = "curStatus";
+            this.curStatus.Size = new System.Drawing.Size(250, 27);
+            this.curStatus.TextBoxTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // currentStatus
             // 
@@ -264,6 +264,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.Coral;
             this.ClientSize = new System.Drawing.Size(1282, 803);
             this.Controls.Add(this.currentStatus);
             this.Controls.Add(this.dataGridView1);
@@ -271,7 +272,6 @@
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4);
-            this.MaximizeBox = false;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Science Direct Systematizer";
@@ -305,7 +305,7 @@
         public System.Windows.Forms.Label currentStatus;
         public System.Windows.Forms.DataGridView dataGridView1;
         public System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripTextBox Cur_status;
+        private System.Windows.Forms.ToolStripTextBox curStatus;
         private System.Windows.Forms.ToolStripMenuItem JournalYearToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ConferenceYearToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem SaveWordIEEEToolStripMenuItem;

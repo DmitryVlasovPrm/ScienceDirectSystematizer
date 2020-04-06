@@ -820,10 +820,10 @@ namespace CourseWork
             string fileName = ExcelDistrib.FileOpen();
             if (fileName != String.Empty)
             {
-                Cur_status.Text = "Cохранение...";
+                curStatus.Text = "Cохранение...";
                 await Task.Run(() => ExcelDistrib.CreatingExcelDistributions(fileName, yearsCount, keywordsCount,
                     authorsYearsCount, authorCount, typesCount, conferences, conferencesYears, journals, journalsYears));
-                Cur_status.Text = "";
+                curStatus.Text = "";
             }
             else
                 return;
@@ -836,9 +836,9 @@ namespace CourseWork
             string fileName = WordList.FileOpen(1);
             if (fileName != String.Empty)
             {
-                Cur_status.Text = "Cохранение...";
+                curStatus.Text = "Cохранение...";
                 await Task.Run(() => WordList.CreatingWordList(fileName, filterPublications, 1));
-                Cur_status.Text = "";
+                curStatus.Text = "";
             }
             else return;
         }
@@ -849,9 +849,9 @@ namespace CourseWork
             string fileName = WordList.FileOpen(2);
             if (fileName != String.Empty)
             {
-                Cur_status.Text = "Cохранение...";
+                curStatus.Text = "Cохранение...";
                 await Task.Run(() => WordList.CreatingWordList(fileName, filterPublications, 2));
-                Cur_status.Text = "";
+                curStatus.Text = "";
             }
             else return;
         }
@@ -862,9 +862,9 @@ namespace CourseWork
             string fileName = BibTeX.FileOpen();
             if (fileName != String.Empty)
             {
-                Cur_status.Text = "Cохранение...";
+                curStatus.Text = "Cохранение...";
                 await Task.Run(() => BibTeX.CreatingList(fileName, filterPublications));
-                Cur_status.Text = "";
+                curStatus.Text = "";
             }
             else return;
         }

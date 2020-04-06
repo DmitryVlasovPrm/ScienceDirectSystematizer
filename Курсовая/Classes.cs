@@ -25,6 +25,7 @@ namespace CourseWork
         public string doi;
         public List<string> authors = new List<string>();
         public List<string> keywords = new List<string>();
+
         public Publication(int id, string type, string tag, string title, string editor, string booktitle, 
             string publisher, string journal, string volume, string pages, string year, string note,
             string isbn, string doi, List<string> authors, List<string> keywords)
