@@ -33,9 +33,9 @@ namespace CourseWork
         {
             //Создание распределений, если какие-то не создавались
             if (yearsCount.Count == 0) MainForm.Create_years_distrib();
+            if (MainForm.typeFlag != true) MainForm.Create_type_publications();
             if (keywordsCount.Count == 0) MainForm.Create_keywords_distrib();
             if (authorsYearsCount.Count == 0) MainForm.Create_authors_years_distrib();
-            if (MainForm.typeFlag != true) MainForm.Create_type_publications();
 
             Excel.Application excelApp = new Excel.Application();
             excelApp.DisplayAlerts = false;
@@ -159,22 +159,40 @@ namespace CourseWork
             range4.VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
             range4.Columns.AutoFit();
 
-            //Распределение по годам--------------------------------------------------------------------------------------
+            //Распределение по типу--------------------------------------------------------------------------------------
             Excel.Worksheet excelSheet5 = (Excel.Worksheet)excelBook.Worksheets.Add();
-            excelSheet5.Name = "Года издания";
+            excelSheet5.Name = "Типы";
             excelSheet5.Cells[1, 1].Font.Bold = true; excelSheet5.Cells[1, 2].Font.Bold = true;
-            excelSheet5.Cells[1, 1] = "Год"; excelSheet5.Cells[1, 2] = "Количество публикаций";
-            for (int i = 0, yCnt = yearsCount.Count; i < yCnt; i++)
-            {
-                excelSheet5.Cells[i + 2, 1] = yearsCount[i].year;
-                excelSheet5.Cells[i + 2, 2] = yearsCount[i].publication_count;
-            }
-            Excel.Range range5 = excelSheet5.Range[excelSheet5.Cells[1, 1], excelSheet5.Cells[yearsCount.Count + 1, 2]];
+            excelSheet5.Cells[1, 1] = "Тип публикаций"; excelSheet5.Cells[1, 2] = "Количество публикаций";
+
+            excelSheet5.Cells[2, 1] = "Конференции"; excelSheet5.Cells[3, 1] = "Журналы"; excelSheet5.Cells[4, 1] = "Книги";
+            excelSheet5.Cells[2, 2] = typesCount.conferencePubl.Count;
+            excelSheet5.Cells[3, 2] = typesCount.journalPubl.Count;
+            excelSheet5.Cells[4, 2] = typesCount.bookPubl.Count;
+
+            Excel.Range range5 = excelSheet5.Range[excelSheet5.Cells[1, 1], excelSheet5.Cells[4, 2]];
             range5.Font.Size = 14;
             range5.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
             range5.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
             range5.VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
             range5.Columns.AutoFit();
+
+            //Распределение по годам--------------------------------------------------------------------------------------
+            Excel.Worksheet excelSheet6 = (Excel.Worksheet)excelBook.Worksheets.Add();
+            excelSheet6.Name = "Года издания";
+            excelSheet6.Cells[1, 1].Font.Bold = true; excelSheet6.Cells[1, 2].Font.Bold = true;
+            excelSheet6.Cells[1, 1] = "Год"; excelSheet6.Cells[1, 2] = "Количество публикаций";
+            for (int i = 0, yCnt = yearsCount.Count; i < yCnt; i++)
+            {
+                excelSheet6.Cells[i + 2, 1] = yearsCount[i].year;
+                excelSheet6.Cells[i + 2, 2] = yearsCount[i].publication_count;
+            }
+            Excel.Range range6 = excelSheet6.Range[excelSheet6.Cells[1, 1], excelSheet6.Cells[yearsCount.Count + 1, 2]];
+            range6.Font.Size = 14;
+            range6.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+            range6.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+            range6.VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
+            range6.Columns.AutoFit();
 
             //Сохранение книги excel
             DialogResult dialogResult = DialogResult.No;
