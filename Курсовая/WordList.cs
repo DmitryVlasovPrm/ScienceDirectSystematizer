@@ -35,71 +35,146 @@ namespace CourseWork
             Word.Document wordDoc = new Word.Document();
             wordDoc = wordApp.Documents.Add();
 
-            /*
-            Word.Paragraph paragraph = null;
-            Word.Range range = wordDoc.Range();
-
-            paragraph = range.Paragraphs.Add();
-            paragraph.Range.Text = FilterPublications[0].title;
-
-            paragraph.Range.ListFormat.ApplyNumberDefault(Word.WdListGalleryType.wdNumberGallery);
-            */
-
             object endOfDoc = "\\endofdoc";
             for (int i = 0, fbCnt = filterPublications.Count; i < fbCnt; i++)
             {
                 string authors = "";
+                string editors = "";
                 string info = "";
                 string pages = "";
+                int start = 0, end = 0;
 
                 var item = filterPublications[i];
 
-                //Попытка вычисления кол-ва страниц
-                try
+                if (type == 1)
                 {
-                    string[] endStart = item.pages.Split(new string[] { " - " }, StringSplitOptions.None);
-                    pages = (int.Parse(endStart[1]) - int.Parse(endStart[0])).ToString();
-                }
-                catch
-                {
-                    pages = item.pages;
-                }
+                    //Попытка вычисления кол-ва страниц
+                    try
+                    {
+                        string[] endStart = item.pages.Split(new string[] { " - " }, StringSplitOptions.None);
+                        pages = (int.Parse(endStart[1]) - int.Parse(endStart[0])).ToString();
+                    }
+                    catch
+                    {
+                        pages = item.pages;
+                    }
 
-                //Формирование строки
-                if (item.authors.Count <= 3)
-                {
-                    for (int j = 0, authCnt = item.authors.Count; j < authCnt; j++)
+                    //Формирование строки
+                    //Авторов от 1 до 3 включительно
+                    if (item.authors.Count <= 3)
                     {
-                        if (j != authCnt - 1)
-                            authors += item.authors[j] + ", ";
+                        for (int j = 0, authCnt = item.authors.Count; j < authCnt; j++)
+                        {
+                            if (j != authCnt - 1)
+                                authors += item.authors[j] + ", ";
+                            else
+                                authors += item.authors[j];
+                        }
+                        //Для книги
+                        if (item.isbn != "")
+                        {
+                            info = item.authors[0] + ". " + item.booktitle +
+                                " : " + item.title + " / " + authors + ". – " + item.publisher + ", " +
+                                item.year + ". – " + pages + " p.";
+                        }
+                        //Для других типов
                         else
-                            authors += item.authors[j] + ". – ";
+                        {
+                            info = item.authors[0] + ". " + item.title +
+                                " / " + authors + " // " + item.journal + ". – " + item.year + ". – Vol. " + item.volume
+                                + ". – P. " + item.pages + ".";
+                        }
                     }
-                    if (item.isbn != "")
-                    {
-                        info = item.authors[0] + ". " + item.booktitle +
-                            " : " + item.title + " / " + authors + item.publisher + ", " +
-                            item.year + ". - " + pages + " p.";
-                    }
+                    //Авторов больше 3
                     else
-                        info = item.title;
+                    {
+                        authors = item.authors[0] + " [et al.]";
+                        //Для книг
+                        if (item.isbn != "")
+                        {
+                            info = item.booktitle + " : " + item.title + " / " +
+                                authors + ". – " + item.publisher + ", " + item.year + ". – " + pages + " p.";
+                        }
+                        else
+                            info = item.title + " / " + authors + " // " + item.journal +
+                                ". - " + item.year + ". – Vol. " + item.volume + ". – P. " + item.pages + ".";
+                    }
                 }
                 else
                 {
-                    authors = item.authors[0] + " [et al.]. – ";
+                    if (item.authors.Count == 1)
+                        authors = item.authors[0] + ", ";
+                    else
+                    {
+                        for (int j = 0; j < item.authors.Count; j++)
+                        {
+                            if (j != item.authors.Count - 2)
+                                authors += item.authors[j] + ", ";
+                            else
+                            {
+                                authors += item.authors[j] + " and " + item.authors[j + 1] + ", ";
+                                break;
+                            }
+                        }
+                    }
+
+                    if (item.editor.Count == 1)
+                        editors = item.editor[0] + ", Ed., ";
+                    else
+                    {
+                        for (int j = 0; j < item.editor.Count; j++)
+                        {
+                            if (j != item.editor.Count - 2)
+                                editors += item.editor[j] + ", ";
+                            else
+                            {
+                                editors += item.editor[j] + " and " + item.editor[j + 1] + ", Eds., ";
+                                break;
+                            }
+                        }
+                    }
+
+                    bool flag = false;
+                    string edAuthors = authors;
+                    if (new HashSet<string>(item.authors).SetEquals(item.editor))
+                    {
+                        if (item.authors.Count == 1) edAuthors += " Ed., ";
+                        else edAuthors += " Eds., ";
+                        flag = true;
+                    }
+
+                    start = edAuthors.Length + 7 + item.title.Length;
+                    //Если книга
                     if (item.isbn != "")
                     {
-                        info = item.booktitle + " : " + item.title + " / " +
-                            authors + item.publisher + ", " + item.year + ". – " + pages + " p.";
+                        if (!flag)
+                            info = edAuthors + "\"" + item.title + ",\" in " + item.booktitle + ", " + editors +
+                                item.publisher + ", " + item.year + ", pp. " + item.pages + ".";
+                        else
+                            info = edAuthors + "\"" + item.title + ",\" in " + item.booktitle + ", " +
+                                item.publisher + ", " + item.year + ", pp. " + item.pages + ".";
+                        end = start + item.booktitle.Length + 1;
                     }
+                    //Другие варианты
                     else
-                        info = item.title;
+                    {
+                        info = authors + "\"" + item.title + ",\" in " + item.journal + ", " +
+                                item.year + ", vol. " + item.volume + ", pp. " + item.pages + ", doi: " + item.doi + ".";
+                        end = start + item.journal.Length + 1;
+                    }
                 }
 
                 //Запись строки в файл
                 Word.Paragraph paragraph;
                 paragraph = wordDoc.Content.Paragraphs.Add();
                 paragraph.Range.Text = info;
+                if (type == 2)
+                {
+                    object oStart = paragraph.Range.Start + start;
+                    object oEnd = paragraph.Range.Start + end;
+                    Word.Range rBold = wordDoc.Range(ref oStart, ref oEnd);
+                    rBold.Italic = 1;
+                }
                 paragraph.Range.Font.Size = 14;
                 paragraph.Range.Font.Name = "Times New Roman";
 

@@ -16,7 +16,18 @@ namespace CourseWork
             if (item.type != "") str += "type = \"" + item.type + "\"\n";
             if (item.tag != "") str += "tag = \"" + item.tag + "\"\n";
             if (item.title != "") str += "title = \"" + item.title + "\"\n";
-            if (item.editor != "") str += "editor = \"" + item.editor + "\"\n";
+
+            string editors = "";
+            for (int i = 0, edCnt = item.editor.Count; i < edCnt; i++)
+            {
+                if (i != edCnt - 1)
+                    editors += item.authors[i] + " and ";
+                else
+                    editors += item.authors[i];
+            }
+            if (editors != "")
+                str += "editor = \"" + editors + "\"\n";
+
             if (item.booktitle != "") str += "booktitle = \"" + item.booktitle + "\"\n";
             if (item.publisher != "") str += "publisher = \"" + item.publisher + "\"\n";
             if (item.journal != "") str += "journal = \"" + item.journal + "\"\n";
@@ -58,7 +69,18 @@ namespace CourseWork
 
             str += "@" + item.type + "{" + item.tag + ",\n";
             if (item.title != "") str += "title = \"" + item.title + "\",\n";
-            if (item.editor != "") str += "editor = \"" + item.editor + "\",\n";
+
+            string editors = "";
+            for (int i = 0, authCnt = item.authors.Count; i < authCnt; i++)
+            {
+                if (i != authCnt - 1)
+                    editors += item.authors[i] + " and ";
+                else
+                    editors += item.authors[i];
+            }
+            if (editors != "")
+                str += "editor = \"" + editors + "\",\n";
+
             if (item.booktitle != "") str += "booktitle = \"" + item.booktitle + "\",\n";
             if (item.publisher != "") str += "publisher = \"" + item.publisher + "\",\n";
             if (item.journal != "") str += "journal = \"" + item.journal + "\",\n";

@@ -149,17 +149,18 @@ namespace CourseWork
                 {
                     bool isTitle = false;
                     string line, buffer = "";
-                    string tag = "", type = "", title = "", editor = "", booktitle = "", publisher = "", journal = "",
+                    string tag = "", type = "", title = "", booktitle = "", publisher = "", journal = "",
                     volume = "", year = "", note = "", pages = "", isbn = "", doi = "";
                     List<string> authors = new List<string>(); List<string> keywords = new List<string>();
+                    List<string> editor = new List<string>();
 
                     while ((line = sr.ReadLine()) != null)
                     {
                         buffer += line;
                         if (buffer == "}")
                         {
-                            Publication item = new Publication(id, type, tag, title, editor, booktitle, publisher,
-                                journal, volume, pages, year, note, isbn, doi, authors, keywords);
+                            Publication item = new Publication(id, type, tag, title, booktitle, publisher,
+                                journal, volume, pages, year, note, isbn, doi, authors, keywords, editor);
 
                             if (!CheckDuplicate(item))
                             {
@@ -168,8 +169,8 @@ namespace CourseWork
                             }
 
                             isTitle = false;
-                            keywords.Clear(); authors.Clear();
-                            buffer = tag = type = title = editor = booktitle = publisher = journal =
+                            keywords.Clear(); authors.Clear(); editor.Clear();
+                            buffer = tag = type = title = booktitle = publisher = journal =
                                 volume = year = note = pages = isbn = doi = "";
                         }
                         else
@@ -188,7 +189,6 @@ namespace CourseWork
                                 title = ParseLine(buffer);
                                 isTitle = true;
                             }
-                            if (buffer.Contains("editor = ")) editor = ParseLine(buffer);
                             if (buffer.Contains("booktitle = ")) booktitle = ParseLine(buffer);
                             if (buffer.Contains("publisher = ")) publisher = ParseLine(buffer);
                             if (buffer.Contains("journal = ")) journal = ParseLine(buffer);
@@ -214,6 +214,15 @@ namespace CourseWork
                                 {
                                     string str = result[i].TrimStart().TrimEnd();
                                     if (str != "") keywords.Add(str);
+                                }
+                            }
+                            if (buffer.Contains("editor = "))
+                            {
+                                string[] result = ParseLine(buffer).Split(new string[] { " and " }, StringSplitOptions.RemoveEmptyEntries);
+                                for (int i = 0; i < result.Length; i++)
+                                {
+                                    string str = result[i].TrimStart().TrimEnd();
+                                    if (str != "") editor.Add(str);
                                 }
                             }
                             buffer = "";
